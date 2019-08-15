@@ -6,8 +6,7 @@ export const mutations = {
   },
   addRoom (state, room) {
     let rooms = state.rooms
-    console.log(rooms)
-    // rooms.push(room)
-    // Vue.set(state, 'rooms', rooms)
+    rooms.push(room)
+    Vue.set(state, 'rooms', rooms)
   }
 }

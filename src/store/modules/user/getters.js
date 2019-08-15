@@ -1,5 +1,5 @@
 export const getters = {
-  inRead: state => {
-    return ''
+  kiki: state => {
+    return state.userId
   }
 }

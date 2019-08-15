@@ -21,22 +21,37 @@ export default {
   sockets: {
     connect() {},
 
-    disconnect() {}
-  },
-  methods: {
-    login(user) {
-      //TODO: pass user or user pass store
+    disconnect() {},
+    signedin(io) {
+      console.log('------------signedin----------')
+      console.log(io.data)
       this.$store
         .dispatch('user/setUser', {
-          userName: user,
+          userName: io.data.userName,
+          userId: io.data.userId,
           isRead: false
         })
         .then(this.$router.push('/home'))
+      console.log('------------signedin----------')
+    },
 
-      // this.$router.push({
-      //   name: 'Home',
-      //   params: { user: user }
-      // })
+    signedout(io) {
+      console.log('------------signedout----------')
+      this.$store
+        .dispatch('user/setUser', {
+          userName: '',
+          userId: '',
+          isRead: false
+        })
+        .then(this.$router.push('/'))
+      console.log('------------signedout----------')
+    }
+  },
+  methods: {
+    login(user) {
+      this.$socket.emit('signin', {
+        userName: user
+      })
     }
   }
 }

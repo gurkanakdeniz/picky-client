@@ -1,5 +1,8 @@
 <template>
   <div>
+    <h1>--------- room ---------</h1>
+    <div class="">{{ room.roomId }}</div>
+
     <Message
       v-for="(item, index) in messages"
       :message.sync="item"
@@ -7,6 +10,8 @@
       v-bind:key="index"
     ></Message>
     <SendMessage v-on:send-message="sendMessage"></SendMessage>
+
+    <h1>--------- room ---------</h1>
   </div>
 </template>
 
@@ -31,10 +36,6 @@ export default {
   },
   mounted() {},
   sockets: {
-    connect() {},
-
-    disconnect() {},
-
     roomMessages(io) {
       //TODO: roomId
       this.$store.dispatch('messages/addMessage', {

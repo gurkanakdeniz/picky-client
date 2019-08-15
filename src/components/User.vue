@@ -1,6 +1,7 @@
 <template>
   <div style="margin: 3em;">
     <h1>{{ user.userName }} user</h1>
+    <h1>--- {{ user.userId }} --</h1>
     <div class="">
       user component
     </div>

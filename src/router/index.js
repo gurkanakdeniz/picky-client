@@ -47,8 +47,6 @@ const router = new Router({
 })
 
 router.beforeEach((routeTo, routeFrom, next) => {
-  console.log(routeTo.path)
-  console.log(routeFrom.path)
   if (routeTo.path !== routeFrom) {
     next()
   }

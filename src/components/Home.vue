@@ -39,7 +39,7 @@ import Room from './Room'
 import { mapState } from 'vuex'
 
 export default {
-  name: 'Room',
+  name: 'Home',
   components: { User, Room },
   data() {
     return {
@@ -50,23 +50,26 @@ export default {
   computed: {
     ...mapState('rooms', ['rooms'])
   },
-  mounted() {},
+  mounted() {
+    // this.rooms = this.rooms = this.$store.state.rooms.rooms
+  },
   sockets: {
-    connect() {},
-
-    disconnect() {},
-
-    connectedRooms(io) {
-      //TODO: roomId
+    connectedRoom(io) {
       this.$store.dispatch('rooms/addRoom', {
-        id: 'weqw',
-        isRead: false
+        roomId: io.data.roomId
+      })
+    },
+    createdRoom(io) {
+      this.$store.dispatch('rooms/addRoom', {
+        roomId: io.data.roomId
       })
     }
   },
   methods: {
     createRoom() {
-      //TODO:
+      this.$socket.emit('createRoom', {
+        userId: this.$store.state.user.user.userId
+      })
     },
 
     connectRoom() {
@@ -74,7 +77,10 @@ export default {
     },
 
     connect(roomId) {
-      //TODO:
+      this.$socket.emit('connectRoom', {
+        userId: this.$store.state.user.user.userId,
+        roomId: roomId
+      })
     }
   }
 }
