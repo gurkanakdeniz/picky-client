@@ -27,32 +27,40 @@ export default {
   props: ['room'],
   data() {
     return {
-      roomId: ''
+      roomId: '',
+      messages: []
       // user:''
     }
   },
   computed: {
-    ...mapState('messages', ['messages'])
+    // TODO: for message getter
+    // ...mapState('messages', ['messages'])
   },
   mounted() {},
   sockets: {
-    roomMessages(io) {
-      //TODO: roomId
-      this.$store.dispatch('messages/addMessage', {
-        message: io.data.message,
-        isRead: false
-      })
+    newMessage(io) {
+      // TODO: correct ?
+      // TODO: not room spec
+      if (io.data.roomId === this.room.roomId) {
+        this.messages.push({
+          message: io.data.message,
+          roomId: io.data.roomId,
+          userId: io.data.userId
+        })
+        // this.$store.dispatch('messages/addMessage', {
+        //   message: io.data.message,
+        //   roomId: io.data.roomId,
+        //   userId: io.data.userId
+        // })
+      }
     }
   },
   methods: {
-    sendMessage() {
-      //TODO: roomId
-      const message = this.message
-      this.message = null
-      this.$socket.emit('roomMessage', {
-        message,
-        date: null,
-        done: false
+    sendMessage(message) {
+      this.$socket.emit('sendMessage', {
+        roomId: this.room.roomId,
+        userId: this.$store.state.user.user.userId,
+        message: message
       })
     }
   }

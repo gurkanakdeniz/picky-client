@@ -16,11 +16,9 @@ export default {
   },
   methods: {
     sendMessage() {
-      this.$emit('send-message', {
-        message,
-        date: null,
-        done: false
-      })
+      const msg = this.message
+      this.message = ''
+      this.$emit('send-message', msg)
     }
   }
 }
