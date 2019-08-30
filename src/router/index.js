@@ -12,43 +12,55 @@ const router = new Router({
     {
       path: '/',
       name: 'Index',
-      component: Index
+      component: Index,
+      meta: {
+        guest: true
+      }
     },
     {
       path: '/home',
       name: 'Home',
-      component: Home
+      component: Home,
+      meta: {
+        requiresAuth: true
+      }
     }
-    // {
-    //   path: '/home/:user',
-    //   name: 'Home',
-    //   component: Home,
-    //   props: true,
-    //   beforeEnter (routeTo, routeFrom, next) {
-    //     store
-    //       .dispatch('rooms/addRoom', {
-    //         id: routeTo.params.user,
-    //         isRead: false
-    //       })
-    //       .then(event => {
-    //         routeTo.params.event = event
-    //         next()
-    //       })
-    //       .catch(error => {
-    //         // TODO
-    //         // if (error.response && error.response.status == 404) {
-    //         //   next({ name: '404', params: { resource: 'event' } })
-    //         // } else {
-    //         //   next({ name: 'network-issue' })
-    //         // }
-    //       })
-    //   }
-    // }
   ]
 })
 
-router.beforeEach((routeTo, routeFrom, next) => {
-  if (routeTo.path !== routeFrom) {
+// router.beforeEach((routeTo, routeFrom, next) => {
+//   if (routeTo.path !== routeFrom) {
+//     next()
+//   }
+// })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (sessionStorage.getItem('user') == null) {
+      next({
+        path: '/',
+        params: { nextUrl: to.fullPath }
+      })
+    } else {
+      next()
+      // let user = JSON.parse(sessionStorage.getItem('user'))
+      // if (to.matched.some(record => record.meta.is_admin)) {
+      //   if (user.is_admin == 1) {
+      //     next()
+      //   } else {
+      //     next({ name: 'userboard' })
+      //   }
+      // } else {
+      //   next()
+      // }
+    }
+  } else if (to.matched.some(record => record.meta.guest)) {
+    if (sessionStorage.getItem('user') == null) {
+      next()
+    } else {
+      next({ name: 'Home' })
+    }
+  } else {
     next()
   }
 })

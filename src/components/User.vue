@@ -1,19 +1,40 @@
 <template>
-  <div style="margin: 3em;">
-    <h1>{{ user.userName }} user</h1>
-    <h1>--- {{ user.userId }} --</h1>
-    <div class="">
-      user component
-    </div>
-  </div>
+  <mdb-container fluid>
+    <mdb-row class="deep-grey-text">
+      <mdb-col>
+        <div v-if="user != null || user != undefined">
+          Enjoy {{ user.userName }} !
+        </div>
+      </mdb-col>
+    </mdb-row>
+  </mdb-container>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import {
+  mdbContainer,
+  mdbRow,
+  mdbCol,
+  mdbCard,
+  mdbCardBody,
+  mdbInput,
+  mdbBtn,
+  mdbIcon
+} from 'mdbvue'
 
 export default {
   name: 'User',
-  components: {},
+  components: {
+    mdbContainer,
+    mdbRow,
+    mdbCol,
+    mdbCard,
+    mdbCardBody,
+    mdbInput,
+    mdbBtn,
+    mdbIcon
+  },
   data() {
     return {
       userId: '',
@@ -23,7 +44,23 @@ export default {
   computed: {
     ...mapState('user', ['user'])
   },
-  mounted() {},
+  mounted() {
+    if (!this.$store.state.user.user) {
+      if (sessionStorage.getItem('user')) {
+        this.$store.dispatch(
+          'user/setUser',
+          JSON.parse(sessionStorage.getItem('user'))
+        )
+        this.$socket.emit(
+          'autosignin',
+          JSON.parse(sessionStorage.getItem('user'))
+        )
+      } else {
+        sessionStorage.clear()
+        this.$router.push('/')
+      }
+    }
+  },
   methods: {
     sendMessage() {}
   }

@@ -1,14 +1,45 @@
 <template>
-  <div>
-    <div style="margin: 10em;">
-      <input v-model="message" type="text" />
-      <button type="button" name="button" v-on:click="sendMessage">Send</button>
-    </div>
-  </div>
+  <mdb-row>
+    <mdb-col md="10">
+      <mdb-input
+        v-on:keyup.native.enter="sendMessage"
+        v-model="message"
+        label="Message"
+        type="text"
+        size="sm"
+      />
+    </mdb-col>
+    <mdb-col md="2">
+      <mdb-btn gradient="blue" rounded v-on:click="sendMessage">
+        Send
+      </mdb-btn>
+    </mdb-col>
+  </mdb-row>
 </template>
 <script type="text/javascript">
+import {
+  mdbContainer,
+  mdbRow,
+  mdbCol,
+  mdbCard,
+  mdbCardBody,
+  mdbInput,
+  mdbBtn,
+  mdbIcon
+} from 'mdbvue'
+
 export default {
   name: 'SendMessage',
+  components: {
+    mdbContainer,
+    mdbRow,
+    mdbCol,
+    mdbCard,
+    mdbCardBody,
+    mdbInput,
+    mdbBtn,
+    mdbIcon
+  },
   data() {
     return {
       message: ''
@@ -16,9 +47,11 @@ export default {
   },
   methods: {
     sendMessage() {
-      const msg = this.message
-      this.message = ''
-      this.$emit('send-message', msg)
+      if (this.message) {
+        const msg = this.message
+        this.message = ''
+        this.$emit('send-message', msg)
+      }
     }
   }
 }

@@ -1,30 +1,47 @@
 <template>
-  <div>
-    <h1>--------- room ---------</h1>
-    <div class="">{{ room.roomId }}</div>
-
-    <Message
-      v-for="(item, index) in messages"
-      :message.sync="item"
-      v-bind:index="index"
-      v-bind:key="index"
-    ></Message>
-    <SendMessage v-on:send-message="sendMessage"></SendMessage>
-
-    <h1>--------- room ---------</h1>
-  </div>
+  <mdb-container fluid v-show="room.showMessages">
+    {{ room.roomId }}
+    <mdb-col>
+      <Message
+        v-for="(item, index) in messages"
+        :message.sync="item"
+        v-bind:index="index"
+        v-bind:key="index"
+      ></Message>
+    </mdb-col>
+  </mdb-container>
 </template>
 
 <script>
 import User from './User'
 import Message from './Message'
-import SendMessage from './SendMessage'
 import { mapState } from 'vuex'
+import {
+  mdbContainer,
+  mdbRow,
+  mdbCol,
+  mdbCard,
+  mdbCardBody,
+  mdbInput,
+  mdbBtn,
+  mdbIcon
+} from 'mdbvue'
 
 export default {
   name: 'Room',
-  components: { User, Message, SendMessage },
-  props: ['room'],
+  components: {
+    User,
+    Message,
+    mdbContainer,
+    mdbRow,
+    mdbCol,
+    mdbCard,
+    mdbCardBody,
+    mdbInput,
+    mdbBtn,
+    mdbIcon
+  },
+  props: ['room', 'view'],
   data() {
     return {
       roomId: '',
@@ -55,14 +72,6 @@ export default {
       }
     }
   },
-  methods: {
-    sendMessage(message) {
-      this.$socket.emit('sendMessage', {
-        roomId: this.room.roomId,
-        userId: this.$store.state.user.user.userId,
-        message: message
-      })
-    }
-  }
+  methods: {}
 }
 </script>
