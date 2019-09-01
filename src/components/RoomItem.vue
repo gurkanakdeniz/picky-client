@@ -43,7 +43,7 @@ export default {
     mdbBtn,
     mdbIcon
   },
-  props: ['room', 'activeRoomId'],
+  props: ['room'],
   data() {
     return {
       roomId: '',
