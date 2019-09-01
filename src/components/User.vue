@@ -44,23 +44,7 @@ export default {
   computed: {
     ...mapState('user', ['user'])
   },
-  mounted() {
-    if (!this.$store.state.user.user) {
-      if (sessionStorage.getItem('user')) {
-        this.$store.dispatch(
-          'user/setUser',
-          JSON.parse(sessionStorage.getItem('user'))
-        )
-        this.$socket.emit(
-          'autosignin',
-          JSON.parse(sessionStorage.getItem('user'))
-        )
-      } else {
-        sessionStorage.clear()
-        this.$router.push('/')
-      }
-    }
-  },
+  mounted() {},
   methods: {
     sendMessage() {}
   }

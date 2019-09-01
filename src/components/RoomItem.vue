@@ -1,6 +1,13 @@
 <template>
   <mdb-container fluid class="rounded-top border border-light">
-    <div class="default room-item" v-on:click="open()">
+    <div
+      class="default room-item"
+      v-bind:class="{
+        'background-remove': isRead,
+        'background-newMessage': isNewMessage
+      }"
+      v-on:click="open()"
+    >
       <h6 class="deep-grey-text mt-1 mb-2 pb-2 mx-1" v-if="validRoom">
         {{ room.roomId }}
       </h6>
@@ -36,11 +43,13 @@ export default {
     mdbBtn,
     mdbIcon
   },
-  props: ['room'],
+  props: ['room', 'activeRoomId'],
   data() {
     return {
       roomId: '',
-      message: ''
+      message: '',
+      isRead: false,
+      isNewMessage: false
       // user:''
     }
   },
@@ -58,11 +67,16 @@ export default {
       // TODO: not room spec
       if (io.data.roomId === this.room.roomId) {
         this.message = io.data.message
+        if (!this.room.showMessages) {
+          this.isNewMessage = true
+        }
       }
     }
   },
   methods: {
     open() {
+      this.isRead = true
+      this.isNewMessage = false
       this.$emit('show-room', this.room.roomId)
     }
   }
@@ -72,6 +86,12 @@ export default {
 <style media="screen">
 .default {
   cursor: pointer;
+}
+.background-newMessage {
+  background-color: #ffb648 !important;
+}
+.background-remove {
+  background-color: transparent;
 }
 .room-item:hover {
   background-color: orange;

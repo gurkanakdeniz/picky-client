@@ -2,9 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/components/Index'
 import Home from '@/components/Home'
-import { store } from '@/store/index'
+import { store } from '../store'
+import { socket } from '../socket'
 
 Vue.use(Router)
+
+let user = null
 
 const router = new Router({
   mode: 'history',
@@ -28,37 +31,33 @@ const router = new Router({
   ]
 })
 
-// router.beforeEach((routeTo, routeFrom, next) => {
-//   if (routeTo.path !== routeFrom) {
-//     next()
-//   }
-// })
-
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (sessionStorage.getItem('user') == null) {
+    user = sessionStorage.getItem('user')
+
+    if (user == null) {
       next({
         path: '/',
         params: { nextUrl: to.fullPath }
       })
     } else {
-      next()
-      // let user = JSON.parse(sessionStorage.getItem('user'))
-      // if (to.matched.some(record => record.meta.is_admin)) {
-      //   if (user.is_admin == 1) {
-      //     next()
-      //   } else {
-      //     next({ name: 'userboard' })
-      //   }
-      // } else {
-      //   next()
-      // }
+      if (!checkUser()) {
+        autoSignin()
+        next()
+      } else {
+        next()
+      }
     }
   } else if (to.matched.some(record => record.meta.guest)) {
-    if (sessionStorage.getItem('user') == null) {
+    if (user == null) {
       next()
     } else {
-      next({ name: 'Home' })
+      if (!checkUser()) {
+        autoSignin()
+        next({ name: 'Home' })
+      } else {
+        next({ name: 'Home' })
+      }
     }
   } else {
     next()
@@ -66,5 +65,16 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(() => {})
+
+const checkUser = () => {
+  return store.state.user.user
+}
+
+const autoSignin = () => {
+  if (user) {
+    store.dispatch('user/setUser', JSON.parse(user))
+    socket.io.emit('autosignin', JSON.parse(user))
+  }
+}
 
 export default router

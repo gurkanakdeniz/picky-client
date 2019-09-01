@@ -50,7 +50,7 @@ export default {
     }
   },
   computed: {
-    // TODO: for message getter
+    // TODO: for old messages get
     // ...mapState('messages', ['messages'])
   },
   mounted() {},
@@ -64,6 +64,18 @@ export default {
           roomId: io.data.roomId,
           userId: io.data.userId
         })
+
+        if (this.$store.state.user.user.userId != io.data.userId) {
+          this.$notify({
+            group: 'newMessage',
+            title: io.data.roomId,
+            text: io.data.message,
+            type: 'warn'
+          })
+        }
+
+        // TODO: for old messages get
+
         // this.$store.dispatch('messages/addMessage', {
         //   message: io.data.message,
         //   roomId: io.data.roomId,

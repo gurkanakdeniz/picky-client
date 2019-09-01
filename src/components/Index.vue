@@ -100,9 +100,6 @@ export default {
 
     disconnect() {},
     signedin(io) {
-      console.log('------------signedin-----------')
-      console.log(io.data)
-
       this.$store
         .dispatch('user/setUser', {
           userName: io.data.userName,
@@ -120,12 +117,9 @@ export default {
           ),
           this.$router.push('/home')
         )
-
-      console.log('------------signedin-----------')
     },
 
     signedout(io) {
-      console.log('------------signedout----------')
       this.$store
         .dispatch('user/setUser', {
           userName: '',
@@ -133,7 +127,6 @@ export default {
           isRead: false
         })
         .then(this.$router.push('/'))
-      console.log('------------signedout----------')
     }
   },
   methods: {

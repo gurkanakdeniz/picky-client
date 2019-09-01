@@ -1,6 +1,10 @@
 <template>
-  <mdb-container fluid>
-    <mdb-row class="deep-grey-text mb-2 mx-1">
+  <mdb-container
+    fluid
+    class="message"
+    v-bind:class="{ 'user-message': isUserMessage }"
+  >
+    <mdb-row>
       {{ message.message }}
     </mdb-row>
   </mdb-container>
@@ -32,9 +36,25 @@ export default {
   props: ['message'],
   data() {
     return {
-      test: false
+      test: ''
+    }
+  },
+  computed: {
+    isUserMessage() {
+      if (this.message.userId == this.$store.state.user.user.userId) {
+        return true
+      }
     }
   },
   methods: {}
 }
 </script>
+
+<style>
+.message {
+}
+.user-message {
+  display: flex !important;
+  justify-content: flex-end !important;
+}
+</style>

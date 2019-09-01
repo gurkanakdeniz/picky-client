@@ -1,6 +1,12 @@
 <template>
   <div id="app">
     <router-view />
+    <notifications
+      group="newMessage"
+      position="bottom left"
+      :max="3"
+      :width="400"
+    />
   </div>
 </template>
 

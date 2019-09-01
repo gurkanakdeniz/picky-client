@@ -4,20 +4,24 @@ import 'bootstrap-css-only/css/bootstrap.min.css'
 import 'mdbvue/build/css/mdb.css'
 
 import Vue from 'vue'
+import Notifications from 'vue-notification'
 import App from './App'
 import router from './router'
 import { store } from './store'
-// import store from './store/store'
+import { socket } from './socket'
 
-import SocketIO from 'socket.io-client'
-import VueSocketIO from 'vue-socket.io'
+Vue.use(socket)
+Vue.use(Notifications)
 
-Vue.use(
-  new VueSocketIO({
-    debug: true,
-    connection: SocketIO('http://localhost:3000') // options object is Optional
-  })
-)
+// import SocketIO from 'socket.io-client'
+// import VueSocketIO from 'vue-socket.io'
+//
+// Vue.use(
+//   new VueSocketIO({
+//     debug: true,
+//     connection: SocketIO('http://localhost:3000') // options object is Optional
+//   })
+// )
 
 Vue.config.productionTip = false
 
